@@ -1,0 +1,318 @@
+:root {
+  /* Exact colors from the Figma file. */
+  --blue: #579aff;           /* + icons, selected contact, "add email", Save */
+  --red: #ff5757;            /* remove-email icon, Delete */
+  --heading: #000;           /* "Contacts" title, Cancel text */
+  --text: #444;              /* contact names (sidebar and name inputs) */
+  --text-secondary: #555;    /* field labels, email addresses */
+  --sidebar-bg: #f8faff;
+  --input-bg: #f9fbff;       /* also the Cancel button background */
+  --input-border: #d7e7ff;
+
+  /* Not in the mockup, which shows a single static screen: hover, error
+     and notification states, chosen to fit with the colors above. */
+  --blue-dark: #3a82ec;      /* hover on blue buttons */
+  --red-dark: #e64545;       /* hover on Delete and remove-email */
+  --hover-bg: #eaf2ff;       /* hover on sidebar names and Cancel */
+  --error: #d93025;          /* error text; --red is too light to read at small sizes */
+  --error-bg: #fff6f5;       /* background of an invalid input */
+  --toast-bg: #323232;
+  --shadow: rgba(0, 0, 0, 0.25);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: "Lato", "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  background: #fff;
+}
+
+button { font: inherit; cursor: pointer; }
+[hidden] { display: none !important; }
+
+.app {
+  display: flex;
+  height: 100vh;
+}
+
+/* ---- Sidebar ---------------------------------------------------------- */
+
+.sidebar {
+  width: 228px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--sidebar-bg);
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 14px 18px 8px;
+}
+
+.sidebar-header h1 {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 400;
+  color: var(--heading);
+}
+
+.search {
+  margin: 4px 18px 10px;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 15px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.contact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.contact-list a {
+  display: block;
+  padding: 6px 20px;
+  font-size: 18px;
+  line-height: 22px;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contact-list a:hover { background: var(--hover-bg); }
+
+.contact-list a.selected {
+  background: var(--blue);
+  color: #fff;
+}
+
+.list-message {
+  padding: 6px 20px;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+/* ---- Round icon buttons (+ and −) ------------------------------------- */
+
+.icon-button {
+  display: inline-flex;
+  padding: 0;
+  border: none;
+  background: none;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.icon-button svg { width: 100%; height: 100%; }
+.icon-button svg path { stroke: #fff; stroke-width: 1.8; stroke-linecap: round; }
+.icon-button.add svg circle { fill: var(--blue); }
+.icon-button.add:hover svg circle { fill: var(--blue-dark); }
+.icon-button.remove svg circle { fill: var(--red); }
+.icon-button.remove:hover svg circle { fill: var(--red-dark); }
+.icon-button.small { width: 24px; height: 24px; }
+
+/* ---- Main form -------------------------------------------------------- */
+
+.main {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+}
+
+.empty-state {
+  margin: auto;
+  color: var(--text-secondary);
+  font-size: 18px;
+  text-align: center;
+  padding: 20px;
+}
+
+.contact-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 76px 32px 30px;
+  max-width: 800px;
+}
+
+.name-row {
+  display: flex;
+  gap: 40px;
+}
+
+.name-row .field { flex: 1; }
+
+.field { margin-bottom: 18px; }
+
+.field label,
+.field .label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.field input[type="text"] {
+  width: 100%;
+  padding: 7px 11px;
+  font: inherit;
+  font-size: 18px;
+  color: var(--text);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 1px;
+}
+
+input:focus {
+  outline: 2px solid var(--blue);
+  outline-offset: -1px;
+}
+
+input.invalid {
+  border-color: var(--error) !important;
+  background: var(--error-bg) !important;
+}
+
+.error {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--error);
+}
+
+.error:empty { display: none; }
+
+/* ---- Email rows ------------------------------------------------------- */
+
+.email-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.email-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+}
+
+/* Saved emails look like plain text (as in the mockup) and only show an
+   input border when hovered or being edited. */
+.email-input {
+  width: 260px;
+  max-width: calc(100% - 40px);
+  padding: 4px 6px;
+  margin-left: -7px;
+  font: inherit;
+  font-size: 18px;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 1px;
+}
+
+.email-input:hover { border-color: var(--input-border); }
+.email-input:focus { background: var(--input-bg); border-color: var(--input-border); }
+
+/* The remove button only appears on hover, or when the row has keyboard
+   focus (so it's still reachable without a mouse). */
+.email-row .remove { width: 24px; height: 24px; visibility: hidden; }
+.email-row:hover .remove,
+.email-row:focus-within .remove { visibility: visible; }
+
+/* Touch screens have no hover, so always show it there. */
+@media (hover: none) {
+  .email-row .remove { visibility: visible; }
+}
+
+.email-row .error { flex-basis: 100%; margin-top: 0; }
+
+.add-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  padding: 2px 0;
+  border: none;
+  background: none;
+  color: var(--blue);
+  font-size: 17px;
+}
+
+.add-email:hover { color: var(--blue-dark); }
+
+/* The + circle follows the button's text color, so hovering anywhere on
+   the button darkens the icon and the text together. */
+.add-email .icon-button svg circle { fill: currentColor; }
+
+/* ---- Bottom buttons --------------------------------------------------- */
+
+.form-actions {
+  display: flex;
+  gap: 30px;
+  margin-top: auto;
+  padding-top: 30px;
+}
+
+.spacer { flex: 1; }
+
+.button {
+  min-width: 120px;
+  padding: 7px 18px;
+  font-size: 18px;
+  border: 1px solid transparent;
+  border-radius: 1px;
+}
+
+.button:disabled { opacity: 0.5; cursor: default; }
+.button.primary { background: var(--blue); color: #fff; }
+.button.primary:hover:not(:disabled) { background: var(--blue-dark); }
+.button.danger { background: var(--red); color: #fff; }
+.button.danger:hover:not(:disabled) { background: var(--red-dark); }
+.button.secondary { background: var(--input-bg); color: var(--heading); border-color: var(--blue); }
+.button.secondary:hover:not(:disabled) { background: var(--hover-bg); }
+
+/* ---- Toast notification ----------------------------------------------- */
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 18px;
+  border-radius: 4px;
+  background: var(--toast-bg);
+  color: #fff;
+  font-size: 15px;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.toast.error { background: var(--error); }
+
+/* ---- Small screens: stack the sidebar above the form ------------------ */
+
+@media (max-width: 700px) {
+  .app { flex-direction: column; height: auto; min-height: 100vh; }
+  .sidebar { width: 100%; max-height: 40vh; }
+  .sidebar-header h1 { font-size: 28px; }
+  .contact-form { padding: 24px 16px; }
+  .name-row { flex-direction: column; gap: 0; }
+  .form-actions { gap: 10px; }
+  .button { min-width: 0; flex: 1; }
+  .spacer { display: none; }
+}

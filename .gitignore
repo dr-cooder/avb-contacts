@@ -1,0 +1,12 @@
+# Private material: API key, personal email, original test files. Never commit.
+reference/
+
+# The database file is created at runtime and holds user data.
+instance/
+*.db
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/

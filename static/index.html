@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contacts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Convention: classes are for styling (style.css), ids are for JavaScript
+       (app.js) or for HTML references (label "for", aria-labelledby). Some
+       one-of-a-kind elements have both with the same name; that's intentional. -->
+  <div class="app">
+    <aside class="sidebar">
+      <header class="sidebar-header">
+        <h1>Contacts</h1>
+        <button type="button" id="new-contact" class="icon-button add" title="New contact" aria-label="New contact">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12"/><path d="M12 6v12M6 12h12"/></svg>
+        </button>
+      </header>
+      <input type="search" id="search" class="search" placeholder="Search" aria-label="Search contacts" autocomplete="off">
+      <ul id="contact-list" class="contact-list" aria-label="Contacts"></ul>
+      <p id="list-message" class="list-message" hidden></p>
+    </aside>
+
+    <main class="main">
+      <!-- Shown when no contact is selected -->
+      <section id="empty-state" class="empty-state">
+        <p>Select a contact, or click <strong>+</strong> to add one.</p>
+      </section>
+
+      <!-- novalidate: we show our own error messages instead of the browser's popups -->
+      <form id="contact-form" class="contact-form" novalidate hidden>
+        <div class="name-row">
+          <div class="field">
+            <label for="first-name">First Name</label>
+            <input type="text" id="first-name" name="first_name" maxlength="100" autocomplete="off" required>
+            <p class="error" data-error-for="first_name"></p>
+          </div>
+          <div class="field">
+            <label for="last-name">Last Name</label>
+            <input type="text" id="last-name" name="last_name" maxlength="100" autocomplete="off" required>
+            <p class="error" data-error-for="last_name"></p>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="label" id="email-label">Email</span>
+          <ul id="email-list" class="email-list" aria-labelledby="email-label"></ul>
+          <p class="error" data-error-for="emails"></p>
+          <button type="button" id="add-email" class="add-email">
+            <span class="icon-button add small" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12"/><path d="M12 6v12M6 12h12"/></svg>
+            </span>
+            add email
+          </button>
+        </div>
+
+        <footer class="form-actions">
+          <button type="button" id="delete" class="button danger">Delete</button>
+          <span class="spacer"></span>
+          <button type="button" id="cancel" class="button secondary">Cancel</button>
+          <button type="submit" id="save" class="button primary">Save</button>
+        </footer>
+      </form>
+    </main>
+  </div>
+
+  <!-- Template for one email row; app.js clones it for each email. -->
+  <template id="email-row-template">
+    <li class="email-row">
+      <input type="email" class="email-input" maxlength="254" placeholder="name@example.com" aria-label="Email address" autocomplete="off">
+      <button type="button" class="icon-button remove" title="Remove email" aria-label="Remove email">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12"/><path d="M6 12h12"/></svg>
+      </button>
+      <p class="error"></p>
+    </li>
+  </template>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
